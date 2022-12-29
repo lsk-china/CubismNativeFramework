@@ -39,7 +39,7 @@ void CubismOffscreenFrame_OpenGLES2::BeginDraw(GLint restoreFBO)
     }
 
     // マスク用RenderTextureをactiveにセット
-    glBindFramebuffer(GL_FRAMEBUFFER, _renderTexture);
+    OpenGLHelper::get()->glBindFramebuffer(GL_FRAMEBUFFER, _renderTexture);
 }
 
 void CubismOffscreenFrame_OpenGLES2::EndDraw()
@@ -50,7 +50,7 @@ void CubismOffscreenFrame_OpenGLES2::EndDraw()
     }
 
     // 描画対象を戻す
-    glBindFramebuffer(GL_FRAMEBUFFER, _oldFBO);
+    OpenGLHelper::get()->glBindFramebuffer(GL_FRAMEBUFFER, _oldFBO);
 }
 
 void CubismOffscreenFrame_OpenGLES2::Clear(float r, float g, float b, float a)
@@ -94,10 +94,10 @@ csmBool CubismOffscreenFrame_OpenGLES2::CreateOffscreenFrame(csmUint32 displayBu
         GLint tmpFramebufferObject;
         glGetIntegerv(GL_FRAMEBUFFER_BINDING, &tmpFramebufferObject);
 
-        glGenFramebuffers(1, &ret);
-        glBindFramebuffer(GL_FRAMEBUFFER, ret);
-        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, _colorBuffer, 0);
-        glBindFramebuffer(GL_FRAMEBUFFER, tmpFramebufferObject);
+        OpenGLHelper::get()->glGenFramebuffers(1, &ret);
+        OpenGLHelper::get()->glBindFramebuffer(GL_FRAMEBUFFER, ret);
+        OpenGLHelper::get()->glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, _colorBuffer, 0);
+        OpenGLHelper::get()->glBindFramebuffer(GL_FRAMEBUFFER, tmpFramebufferObject);
 
         _renderTexture = ret;
 
@@ -125,7 +125,7 @@ void CubismOffscreenFrame_OpenGLES2::DestroyOffscreenFrame()
 
     if (_renderTexture!=0)
     {
-        glDeleteFramebuffers(1, &_renderTexture);
+        OpenGLHelper::get()->glDeleteFramebuffers(1, &_renderTexture);
         _renderTexture = 0;
     }
 }

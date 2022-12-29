@@ -14,6 +14,8 @@
 #include "Type/csmRectF.hpp"
 #include "Math/CubismVector2.hpp"
 #include "Type/csmMap.hpp"
+#include <QOpenGLFunctions>
+#include "openglhelper.hpp"
 
 #ifdef CSM_TARGET_ANDROID_ES2
 #include <jni.h>
@@ -28,8 +30,8 @@
 #endif
 
 #if defined(CSM_TARGET_WIN_GL) || defined(CSM_TARGET_LINUX_GL)
-#include <GL/glew.h>
-#include <GL/gl.h>
+#include <QOpenGLFunctions>
+#include "openglhelper.hpp"
 #endif
 
 #ifdef CSM_TARGET_MAC_GL
