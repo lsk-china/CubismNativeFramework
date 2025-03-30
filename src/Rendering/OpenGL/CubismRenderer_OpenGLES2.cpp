@@ -191,8 +191,8 @@ void CubismRendererProfile_OpenGLES2::SetGlEnable(GLenum index, GLboolean enable
 
 void CubismRendererProfile_OpenGLES2::SetGlEnableVertexAttribArray(GLuint index, GLint enabled)
 {
-    if (enabled) glEnableVertexAttribArray(index);
-    else glDisableVertexAttribArray(index);
+    if (enabled) OpenGLHelper::get()->glEnableVertexAttribArray(index);
+    else OpenGLHelper::get()->glDisableVertexAttribArray(index);
 }
 
 void CubismRendererProfile_OpenGLES2::Save()
@@ -209,10 +209,10 @@ void CubismRendererProfile_OpenGLES2::Save()
     glActiveTexture(GL_TEXTURE0); //テクスチャユニット0をアクティブに（以後の設定対象とする）
     glGetIntegerv(GL_TEXTURE_BINDING_2D, &_lastTexture0Binding2D);
 
-    glGetVertexAttribiv(0, GL_VERTEX_ATTRIB_ARRAY_ENABLED, &_lastVertexAttribArrayEnabled[0]);
-    glGetVertexAttribiv(1, GL_VERTEX_ATTRIB_ARRAY_ENABLED, &_lastVertexAttribArrayEnabled[1]);
-    glGetVertexAttribiv(2, GL_VERTEX_ATTRIB_ARRAY_ENABLED, &_lastVertexAttribArrayEnabled[2]);
-    glGetVertexAttribiv(3, GL_VERTEX_ATTRIB_ARRAY_ENABLED, &_lastVertexAttribArrayEnabled[3]);
+    OpenGLHelper::get()->glGetVertexAttribiv(0, GL_VERTEX_ATTRIB_ARRAY_ENABLED, &_lastVertexAttribArrayEnabled[0]);
+    OpenGLHelper::get()->glGetVertexAttribiv(1, GL_VERTEX_ATTRIB_ARRAY_ENABLED, &_lastVertexAttribArrayEnabled[1]);
+    OpenGLHelper::get()->glGetVertexAttribiv(2, GL_VERTEX_ATTRIB_ARRAY_ENABLED, &_lastVertexAttribArrayEnabled[2]);
+    OpenGLHelper::get()->glGetVertexAttribiv(3, GL_VERTEX_ATTRIB_ARRAY_ENABLED, &_lastVertexAttribArrayEnabled[3]);
 
     _lastScissorTest = glIsEnabled(GL_SCISSOR_TEST);
     _lastStencilTest = glIsEnabled(GL_STENCIL_TEST);
@@ -238,7 +238,7 @@ void CubismRendererProfile_OpenGLES2::Save()
 
 void CubismRendererProfile_OpenGLES2::Restore()
 {
-    glUseProgram(_lastProgram);
+    OpenGLHelper::get()->glUseProgram(_lastProgram);
 
     SetGlEnableVertexAttribArray(0, _lastVertexAttribArrayEnabled[0]);
     SetGlEnableVertexAttribArray(1, _lastVertexAttribArrayEnabled[1]);
@@ -255,8 +255,8 @@ void CubismRendererProfile_OpenGLES2::Restore()
 
     glColorMask(_lastColorMask[0], _lastColorMask[1], _lastColorMask[2], _lastColorMask[3]);
 
-    glBindBuffer(GL_ARRAY_BUFFER, _lastArrayBufferBinding); //前にバッファがバインドされていたら破棄する必要がある
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _lastElementArrayBufferBinding);
+    OpenGLHelper::get()->glBindBuffer(GL_ARRAY_BUFFER, _lastArrayBufferBinding); //前にバッファがバインドされていたら破棄する必要がある
+    OpenGLHelper::get()->glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _lastElementArrayBufferBinding);
 
     glActiveTexture(GL_TEXTURE1); //テクスチャユニット1を復元
     glBindTexture(GL_TEXTURE_2D, _lastTexture1Binding2D);
@@ -267,7 +267,7 @@ void CubismRendererProfile_OpenGLES2::Restore()
     glActiveTexture(_lastActiveTexture);
 
     // restore blending
-    glBlendFuncSeparate(_lastBlending[0], _lastBlending[1], _lastBlending[2], _lastBlending[3]);
+    OpenGLHelper::get()->glBlendFuncSeparate(_lastBlending[0], _lastBlending[1], _lastBlending[2], _lastBlending[3]);
 }
 
 /*********************************************************************************************************************
@@ -515,8 +515,8 @@ void CubismRenderer_OpenGLES2::PreDraw()
     glBindVertexArrayOES(0);
 #endif
 
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-    glBindBuffer(GL_ARRAY_BUFFER, 0); //前にバッファがバインドされていたら破棄する必要がある
+    OpenGLHelper::get()->glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+    OpenGLHelper::get()->glBindBuffer(GL_ARRAY_BUFFER, 0); //前にバッファがバインドされていたら破棄する必要がある
 
     //異方性フィルタリング。プラットフォームのOpenGLによっては未対応の場合があるので、未設定のときは設定しない
     if (GetAnisotropy() >= 1.0f)
@@ -689,7 +689,7 @@ void CubismRenderer_OpenGLES2::DrawMeshOpenGL(const CubismModel& model, const cs
     }
 
     // 後処理
-    glUseProgram(0);
+    OpenGLHelper::get()->glUseProgram(0);
     SetClippingContextBufferForDraw(NULL);
     SetClippingContextBufferForMask(NULL);
 }

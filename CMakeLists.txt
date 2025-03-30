@@ -1,9 +1,10 @@
 cmake_minimum_required(VERSION 3.10)
-
+project(Framework)
 set(LIB_NAME Framework)
+set(FRAMEWORK_SOURCE OpenGL)
 
 # Force static library.
-add_library(${LIB_NAME} STATIC)
+add_library(${LIB_NAME} src/Rendering/OpenGL/openglhelper.hpp)
 
 add_subdirectory(src)
 
